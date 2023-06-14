@@ -51,7 +51,12 @@
                                     shrinkable="true"
                                     priority="NeverOverflow"/>
                             </layoutData>
+                            
                         </SearchField>
+                        
+                             <DateTimePicker
+                            value="{path: '/filters/date', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium', displayFormat: 'yyyy/MM/dd' }}"
+                            change=".onDateFilterChange" width="15rem"/>
                         <ToolbarSpacer/>
                         <Button
                             id="sortButton"

@@ -8,7 +8,7 @@ sap.ui.define([
     "sap/ui/Device",
     "sap/ui/core/Fragment",
     "../model/formatter"
-], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter) {
+], function(BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter) {
     "use strict";
 
     return BaseController.extend("zsd016movements.controller.List", {
@@ -23,7 +23,7 @@ sap.ui.define([
          * Called when the list controller is instantiated. It sets up the event handling for the list/detail communication and other lifecycle tasks.
          * @public
          */
-        onInit : function () {
+        onInit: function() {
             // Control state model
             var oList = this.byId("list"),
                 oViewModel = this._createViewModel(),
@@ -36,21 +36,21 @@ sap.ui.define([
             this._oList = oList;
             // keeps the filter and search state
             this._oListFilterState = {
-                aFilter : [],
-                aSearch : []
+                aFilter: [],
+                aSearch: []
             };
 
             this.setModel(oViewModel, "listView");
             // Make sure, busy indication is showing immediately so there is no
             // break after the busy indication for loading the view's meta data is
             // ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-            oList.attachEventOnce("updateFinished", function(){
+            oList.attachEventOnce("updateFinished", function() {
                 // Restore original busy indicator delay for the list
                 oViewModel.setProperty("/delay", iOriginalBusyDelay);
             });
 
             this.getView().addEventDelegate({
-                onBeforeFirstShow: function () {
+                onBeforeFirstShow: function() {
                     this.getOwnerComponent().oListSelector.setBoundList(oList);
                 }.bind(this)
             });
@@ -69,7 +69,7 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the update finished event
          * @public
          */
-        onUpdateFinished : function (oEvent) {
+        onUpdateFinished: function(oEvent) {
             // update the list object counter after new data is loaded
             this._updateListItemCount(oEvent.getParameter("total"));
         },
@@ -82,7 +82,7 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the search event
          * @public
          */
-        onSearch: function (oEvent) {
+        onSearch: function(oEvent) {
             if (oEvent.getParameters().refreshButtonPressed) {
                 // Search field's 'refresh' button has been pressed.
                 // This is visible if you select any list item.
@@ -108,8 +108,28 @@ sap.ui.define([
          * and group settings and refreshes the list binding.
          * @public
          */
-        onRefresh: function () {
+        onRefresh: function() {
             this._oList.getBinding("items").refresh();
+        },
+
+        onDateFilterChange: function(event) {
+            var oTable = this.byId("list");
+            var oBinding = oTable.getBinding("items");
+            var oFilter = new sap.ui.model.Filter("MovDate", sap.ui.model.FilterOperator.EQ, event.getParameter("value"));
+            oBinding.filter([oFilter]);
+        },
+
+        onTypeFilterChange: function(event) {
+            var oTable = this.byId("lineItemsList");
+            var oBinding = oTable.getBinding("items");
+            var sSelectedKey = event.getParameter("selectedItem").getKey();
+            var oFilter;
+            if (sSelectedKey) {
+                oFilter = new sap.ui.model.Filter("Type", sap.ui.model.FilterOperator.EQ, sSelectedKey);
+            } else {
+                oFilter = [];
+            }
+            oBinding.filter(oFilter);
         },
 
         /**
@@ -117,7 +137,7 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the button press event
          * @public
          */
-        onOpenViewSettings: function (oEvent) {
+        onOpenViewSettings: function(oEvent) {
             var sDialogTab = "filter";
             if (oEvent.getSource() instanceof sap.m.Button) {
                 var sButtonId = oEvent.getSource().getId();
@@ -133,7 +153,7 @@ sap.ui.define([
                     id: this.getView().getId(),
                     name: "zsd016movements.view.ViewSettingsDialog",
                     controller: this
-                }).then(function(oDialog){
+                }).then(function(oDialog) {
                     // connect dialog to the root view of this component (models, lifecycle)
                     this.getView().addDependent(oDialog);
                     oDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
@@ -153,8 +173,8 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the confirm event
          * @public
          */
-        onConfirmViewSettingsDialog: function (oEvent) {
-            
+        onConfirmViewSettingsDialog: function(oEvent) {
+
             this._applySortGroup(oEvent);
         },
 
@@ -163,12 +183,12 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the confirm event
          * @private
          */
-        _applySortGroup: function (oEvent) {
+        _applySortGroup: function(oEvent) {
             var mParams = oEvent.getParameters(),
                 sPath,
                 bDescending,
                 aSorters = [];
-            
+
             sPath = mParams.sortItem.getKey();
             bDescending = mParams.sortDescending;
             aSorters.push(new Sorter(sPath, bDescending));
@@ -180,7 +200,7 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the list selectionChange event
          * @public
          */
-        onSelectionChange: function (oEvent) {
+        onSelectionChange: function(oEvent) {
             var oList = oEvent.getSource(),
                 bSelected = oEvent.getParameter("selected");
 
@@ -196,7 +216,7 @@ sap.ui.define([
          * If there was an object selected in the list, that selection is removed.
          * @public
          */
-        onBypassed: function () {
+        onBypassed: function() {
             this._oList.removeSelections(true);
         },
 
@@ -208,10 +228,10 @@ sap.ui.define([
          * @public
          * @returns {sap.m.GroupHeaderListItem} group header with non-capitalized caption.
          */
-        createGroupHeader: function (oGroup) {
+        createGroupHeader: function(oGroup) {
             return new GroupHeaderListItem({
-                title : oGroup.text,
-                upperCase : false
+                title: oGroup.text,
+                upperCase: false
             });
         },
 
@@ -242,7 +262,7 @@ sap.ui.define([
             });
         },
 
-        _onMasterMatched:  function() {
+        _onMasterMatched: function() {
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
         },
@@ -253,12 +273,12 @@ sap.ui.define([
          * @param {sap.m.ObjectListItem} oItem selected Item
          * @private
          */
-        _showDetail: function (oItem) {
+        _showDetail: function(oItem) {
             var bReplace = !Device.system.phone;
             // set the layout property of FCL control to show two columns
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
             this.getRouter().navTo("object", {
-                objectId : oItem.getBindingContext().getProperty("MovId")
+                objectId: oItem.getBindingContext().getProperty("MovId")
             }, bReplace);
         },
 
@@ -267,7 +287,7 @@ sap.ui.define([
          * @param {integer} iTotalItems the total number of items in the list
          * @private
          */
-        _updateListItemCount: function (iTotalItems) {
+        _updateListItemCount: function(iTotalItems) {
             var sTitle;
             // only update the counter if the length is final
             if (this._oList.getBinding("items").isLengthFinal()) {
@@ -280,7 +300,7 @@ sap.ui.define([
          * Internal helper method to apply both filter and search state together on the list binding
          * @private
          */
-        _applyFilterSearch: function () {
+        _applyFilterSearch: function() {
             var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter),
                 oViewModel = this.getModel("listView");
             this._oList.getBinding("items").filter(aFilters, "Application");
@@ -298,7 +318,7 @@ sap.ui.define([
          * @param {string} sFilterBarText the selected filter value
          * @private
          */
-        _updateFilterBar : function (sFilterBarText) {
+        _updateFilterBar: function(sFilterBarText) {
             var oViewModel = this.getModel("listView");
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
