@@ -163,6 +163,12 @@ sap.ui.define([
                 this.byId("viewSettingsDialog").open(sDialogTab);
             }
         },
+        onAddMove: function() {
+            var bReplace = !Device.system.phone;
+            this.getRouter().navTo("object", {
+                objectId: 'new'
+            }, bReplace);
+        },
 
         /**
          * Event handler called when ViewSettingsDialog has been confirmed, i.e.
@@ -177,6 +183,12 @@ sap.ui.define([
 
             this._applySortGroup(oEvent);
         },
+
+        clearSelection: function() {
+            var oList = this.byId("list");
+            oList.removeSelections();
+        },
+
 
         /**
          * Apply the chosen sorter and grouper to the list

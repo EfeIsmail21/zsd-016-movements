@@ -11,13 +11,9 @@
         busyIndicatorDelay="{detailView>/delay}">
         <semantic:titleHeading>
             <Title
-                text="{MovId}"
+                text="Move {MovId}"
                 level="H2"/>
         </semantic:titleHeading>
-        <semantic:headerContent>
-            <ObjectAttribute title="{i18n>movId}"/>
-            <ObjectNumber />
-        </semantic:headerContent>
         <semantic:content>
         <VBox>
         
@@ -60,7 +56,7 @@
                     <Toolbar>
                         <Title
                             id="lineItemsTitle"
-                            text="{detailView>/lineItemListTitle}"
+                            text="Moves"
                             titleStyle="H3"
                             level="H3"/>
                     </Toolbar>
@@ -99,12 +95,11 @@
             
             </VBox>
         </semantic:content>
-
-        <semantic:closeAction>
-            <semantic:CloseAction
+            <semantic:closeAction>
+                <semantic:CloseAction
                     id="closeColumn"
                     press=".onCloseDetailPress"/>
-        </semantic:closeAction>
+            </semantic:closeAction>
 
         <semantic:fullScreenAction>
             <semantic:FullScreenAction

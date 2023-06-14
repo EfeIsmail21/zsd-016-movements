@@ -175,14 +175,11 @@ sap.ui.define([
             oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
         },
 
-        /**
-         * Set the full screen mode to false and navigate to list page
-         */
         onCloseDetailPress: function() {
-            var oList = this.getView().byId("listPage");
-            console.log(oList);
-            oList.removeSelections();
-            this.getOwnerComponent().getRouter().navTo("listPage");
+            var currentHash = window.location.hash;
+            var baseUrl = window.location.href.split('#')[0];
+            var newUrl = baseUrl + currentHash.split('&')[0];
+            window.location.href = newUrl;
         },
 
 
