@@ -67,23 +67,30 @@
                 </headerToolbar>
                 <columns>
                     <Column>
-                        <Text text="{i18n>ItemId}"/>
+                        <Text text="MoveId"/>
                     </Column>
-                    <Column
-                        hAlign="End">
-                        <Text text="{i18n>detailLineItemTableUnitNumberColumn}"/>
+                    <Column>
+                        <Text text="ItemId"/>
+                    </Column>
+                    <Column>
+                        <Text text="Matnr"/>
+                    </Column>
+                    <Column>
+                        <Text text="Umziz"/>
+                    </Column> 
+                    <Column>
+                        <Text text="Meins"/>
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
                             <ObjectIdentifier
-                                title="{ItemId}"
-                                text="{ItemId}"/>
-                            <ObjectNumber />
-
-                              <Text text="{ItemId}" />
-       
+                                title="{ItemId}"/>
+                            <Text text="{ItemId}" />
+                            <Text text="{Matnr}" />
+                            <Text text="{Umziz}" />
+                            <Text text="{Meins}" />       
                         </cells>                       
                     </ColumnListItem>
                 </items>
